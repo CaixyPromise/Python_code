@@ -8,5 +8,5 @@ mac =[]
 for i in range(len(macHex))[::2]:
     mac.append(macHex[i:i+2])
 mac =':'.join(mac)
-print(f'IP地址：{ip}')
-print(f'MAC地址：{mac}')
+print(f'Local IP：{ip}')
+print(f'Local MAC：{mac}')
