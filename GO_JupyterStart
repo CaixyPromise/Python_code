@@ -1,0 +1,27 @@
+import os
+import threading
+import tkinter as tk
+
+win = tk.Tk();
+win.geometry('300x200');
+win.title('Jupyter notebook S/Ier');
+
+def start():
+    os.system('jupyter notebook');
+    return 0;
+
+def Threading_start():
+    t = threading.Thread(target=start);
+    t.daemon =True;
+    t.start();
+    return 0;
+
+
+tk.Label(win,text='Jupyter start-up').pack();
+tk_button = tk.Button(win,text='start-up Jupyter',command=lambda :[Threading_start(),win.withdraw()]);
+tk_button.place(x=100,y=70);
+
+tk_label = tk.Label(win,text='Since in CaixyPromise');
+tk_label.place(x=160,y=170);
+
+win.mainloop();
