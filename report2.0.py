@@ -56,21 +56,26 @@ def onRightButtonDown(event):
     win.destroy()
 time_label.bind("<Button-3>",onRightButtonDown)
 
-url = "http://www.weather.com.cn/weather/101010100.shtml"
-resp = urlopen(url)
-soup = BeautifulSoup(resp, "html.parser")
-target_Today = soup.find("p", class_="tem")
-try:
-    temperatureHight = target_Today.span.string
-except AttributeError:
-    temperatureHight = target_Today.find_next("p", class_="tem").span.string
+def weater():
+    global temperatureHight, temperatureLow, weather
+    url = "http://www.weather.com.cn/weather/101010100.shtml"
+    resp = urlopen(url)
+    soup = BeautifulSoup(resp, "html.parser")
+    target_Today = soup.find("p", class_="tem")
+    try:
+        temperatureHight = target_Today.span.string
+    except AttributeError:
+        temperatureHight = target_Today.find_next("p", class_="tem").span.string
 
-temperatureLow = target_Today.i.string
-weather = soup.find("p", class_="wea").string
+    temperatureLow = target_Today.i.string
+    weather = soup.find("p", class_="wea").string
+weater()
 
 def nowDateTime():
     traffic_io = psutil.net_io_counters()[:2]
     while var_still.get() == 1:
+        if time.strftime("%M") == "30" or time.strftime("%M") == "00":
+            weater()
         day_date = time.strftime("%Y - %m - %d")
         dat_time = time.strftime("%H : %M : %S")
         day = f"{day_date}\n{dat_time}"
