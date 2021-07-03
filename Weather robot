@@ -1,0 +1,40 @@
+import requests
+import json
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+def sign():
+    global msg
+    url = "https://free-api.heweather.com/s6/weather/forecast"
+    weather_data = {
+        "location": "北京", # 这里更改为你需要的城市地址
+        "key": "【这里填入你的天气系统的API，并将括号删掉】,
+        "lang": "zh"
+    }
+    data_js = requests.get(url, params=weather_data).json()
+
+    for i in range(1):  # 1 为今天，2为明天
+        data = data_js["HeWeather6"][0]["daily_forecast"]
+        day_date = data[i]["date"]
+        city_name = weather_data["location"]
+        weather = data[i]["cond_txt_d"]
+        tmp_H,tmp_L = data[i]["tmp_max"],data[i]["tmp_min"]
+        wind_d,wind_p = data[i]["wind_dir"],data[i]["wind_sc"]
+
+
+        msg = f"今日: {day_date}\n" \
+              f"今日: {city_name}天气 {weather}\n" \
+              f"最高温度: {tmp_H}°C 最低气温: {tmp_L}°C \n" \
+              f"风力: {wind_d} {wind_p} 级"
+
+    qqMsg = "https://qmsg.zendee.cn/send/【这里填入你的机器人的API，并将括号删掉】?msg=" + msg + "&qq=【这里填入接收者QQ号，并将括号删掉】"
+    requests.get(qqMsg)
+
+def main():
+    sign()
+
+def get_mainEvent(event, context):
+    return main()
+
+if __name__ == "__main__":
+    main()
